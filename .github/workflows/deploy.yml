@@ -62,8 +62,8 @@ jobs:
       - name: Deploy site
         uses: ./.github/actions/deploy-s3-javascript
         env:
-          AWS_ACESS_KEY_ID : ${{secrets.AWS_ACESS_KEY_ID}}
-          AWS_SECRET_ACESS_KEY : ${{secrets.AWS_SECRET_ACESS_KEY}}
+          AWS_ACESS_KEY_ID : AKIAXWCRC7ZGOKQSRSQX
+          AWS_SECRET_ACESS_KEY : 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
         with: 
           bucket: gh-js-custom-actions
           dist-folder: ./dist

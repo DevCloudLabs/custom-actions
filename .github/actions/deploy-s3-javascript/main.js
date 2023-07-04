@@ -4,8 +4,8 @@ const exec = require('@actions/exec')
 
 function run() {
     // Get some input values
-    const bucket = core.getInput('bucket', { required: true });
-    const bucketRegion = core.getInput('bucket-region', { required: true });
+    const bucket = core.getInput('bucket', { required: true })
+    const bucketRegion = core.getInput('bucket-region', { required: true })
     const distFolder = core.getInput('dist-folder', { required: true })
     
     // Upload files
