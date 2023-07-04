@@ -9,8 +9,13 @@ jobs:
     steps:
       - name: Get code
         uses: actions/checkout@v3
-      - name: Load & cached dependencies
+      - name: Load & cache dependencies
+        id: cache-deps
         uses: ./.github/actions/cached-deps
+        with:
+          caching: 'false'
+      - name: Output information
+        run: echo "Cache used? ${{ steps.cache-deps.outputs.used-cache }}"
       - name: Lint code
         run: npm run lint
   test:
@@ -18,7 +23,7 @@ jobs:
     steps:
       - name: Get code
         uses: actions/checkout@v3
-      - name: Load & cached dependencies
+      - name: Load & cache dependencies
         uses: ./.github/actions/cached-deps
       - name: Test code
         id: run-tests
@@ -35,10 +40,8 @@ jobs:
     steps:
       - name: Get code
         uses: actions/checkout@v3
-      - name: Load & cached dependencies
+      - name: Load & cache dependencies
         uses: ./.github/actions/cached-deps
-        with:
-          caching: 'false'
       - name: Build website
         run: npm run build
       - name: Upload artifacts
@@ -60,11 +63,15 @@ jobs:
       - name: Output contents
         run: ls
       - name: Deploy site
+        id: deploy
         uses: ./.github/actions/deploy-s3-javascript
         env:
-          AWS_ACESS_KEY_ID : ${{ secrets.AWS_ACESS_KEY_ID }}
-          AWS_SECRET_ACESS_KEY : ${{ secrets.AWS_SECRET_ACESS_KEY }}
-        with: 
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        with:
           bucket: gh-js-custom-actions
           dist-folder: ./dist
           # bucket-region: us-east-2
+      - name: Output information
+        run: |
+          echo "Live URL: ${{ steps.deploy.outputs.website-url }}"
